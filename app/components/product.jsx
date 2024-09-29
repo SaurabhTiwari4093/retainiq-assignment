@@ -21,14 +21,14 @@ function ProductFilterTag({ text, color = "gray" }) {
   );
 }
 
-export function Product({ variant }) {
+export function Product({ variant, setShowModal }) {
   const { img, text } = variant;
 
   if (img === null) {
     return (
       <ProductWrapper>
         <ContentCenter className={"h-full"}>
-          <AddVariant onClick={() => console.log("add Variant")} />
+          <AddVariant onClick={() => setShowModal(true)} />
         </ContentCenter>
       </ProductWrapper>
     );
@@ -43,6 +43,7 @@ export function Product({ variant }) {
             alt={"Product"}
             fill={true}
             className="rounded object-cover object-top"
+            sizes="9rem"
           />
         </div>
         <div className="text-sm font-medium text-center">{text}</div>

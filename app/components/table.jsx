@@ -7,6 +7,7 @@ import ContentCenter from "./ContentCenter";
 import { MoreIcon } from "../assets/icons";
 import { useDrag, useDrop, DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import CollectionModal from "./modal";
 
 const initialHeaders = ["Product Filter", "Primary Variant", "Variant 2"];
 const initialData = [
@@ -15,7 +16,7 @@ const initialData = [
     variants: [
       {
         img: "/images/1.jpg",
-        text: "Anniversary Sale",
+        text: "Anniversary sale",
       },
       {
         img: "/images/2.webp",
@@ -28,18 +29,24 @@ const initialData = [
     variants: [
       {
         img: "/images/3.webp",
-        text: "Anniversary Sale",
+        text: "Single image",
       },
       {
         img: "/images/4.webp",
-        text: "Zero discount",
+        text: "Multi image",
       },
     ],
   },
 ];
 
-function DraggableRow({ row, index, moveRow, removeRow, addColumn }) {
-  console.log("Row ", row);
+function DraggableRow({
+  row,
+  index,
+  moveRow,
+  removeRow,
+  addColumn,
+  setShowModal,
+}) {
   const [, dragRef] = useDrag({
     type: "row",
     item: { index },
@@ -70,7 +77,7 @@ function DraggableRow({ row, index, moveRow, removeRow, addColumn }) {
       </div>
       {row.variants.map((variant, variantIndex) => (
         <TableCell key={variantIndex}>
-          <Product variant={variant} />
+          <Product variant={variant} setShowModal={setShowModal} />
         </TableCell>
       ))}
       <ContentCenter className={"p-4"}>
@@ -84,6 +91,7 @@ export default function Table() {
   const [headers, setHeaders] = useState(initialHeaders);
   const [data, setData] = useState(initialData);
   const [idCounter, setIdCounter] = useState(initialData.length + 1);
+  const [showModal, setShowModal] = useState(false);
 
   // Function to add a new row with default null object structure for variants
   const addRow = () => {
@@ -133,43 +141,49 @@ export default function Table() {
   };
 
   return (
-    <DndProvider backend={HTML5Backend}>
-      <div className="bg-gray-50 rounded border border-gray-200 mt-4 relative overflow-x-auto">
-        <div className="flex my-4 font-medium text-gray-600 z-10">
-          <div className="sticky left-0 flex z-20 bg-gray-50">
-            <div className="w-24" />
-            <TableCell width={96}>
-              <div className="text-center">{headers[0]}</div>
-            </TableCell>
+    <>
+      <DndProvider backend={HTML5Backend}>
+        <div className="bg-gray-50 rounded border border-gray-200 mt-4 relative overflow-x-auto">
+          <div className="flex my-4 font-medium text-gray-600 z-10">
+            <div className="sticky left-0 flex z-20 bg-gray-50">
+              <div className="w-24" />
+              <TableCell width={96}>
+                <div className="text-center">{headers[0]}</div>
+              </TableCell>
+            </div>
+            {headers.slice(1).map((header, index) => (
+              <TableCell key={index}>
+                <div className="flex justify-between items-center text-nowrap">
+                  {header}
+                  <MoreIcon />
+                </div>
+              </TableCell>
+            ))}
           </div>
-          {headers.slice(1).map((header, index) => (
-            <TableCell key={index}>
-              <div className="flex justify-between items-center text-nowrap">
-                {header}
-                <MoreIcon />
-              </div>
-            </TableCell>
+
+          {data.map((row, index) => (
+            <DraggableRow
+              key={row.id}
+              row={row}
+              index={index}
+              moveRow={moveRow}
+              removeRow={removeRow}
+              addColumn={addColumn}
+              setShowModal={setShowModal}
+            />
           ))}
-        </div>
 
-        {data.map((row, index) => (
-          <DraggableRow
-            key={row.id}
-            row={row}
-            index={index}
-            moveRow={moveRow}
-            removeRow={removeRow}
-            addColumn={addColumn}
-          />
-        ))}
-
-        <div className="sticky left-0 flex z-10 bg-gray-50">
-          <ContentCenter className={"w-24 p-4"}>
-            <AddButton onClick={addRow} />
-          </ContentCenter>
-          <div className="w-96" />
+          <div className="sticky left-0 flex z-10 bg-gray-50">
+            <ContentCenter className={"w-24 p-4"}>
+              <AddButton onClick={addRow} />
+            </ContentCenter>
+            <div className="w-96" />
+          </div>
         </div>
-      </div>
-    </DndProvider>
+      </DndProvider>
+      {showModal && (
+        <CollectionModal setShowModal={setShowModal} />
+      )}
+    </>
   );
 }
