@@ -57,13 +57,15 @@ export default function Table() {
   };
 
   return (
-    <div className="bg-gray-50 rounded border border-gray-200 mt-4 p-4">
+    <div className="bg-gray-50 rounded border border-gray-200 mt-4 relative overflow-x-auto">
       {/* Header Row */}
       <div className="flex my-4 font-medium text-gray-600">
-        <div className="w-24" />
-        <TableCell width={96}>
-          <div className="text-center">{headers[0]}</div>
-        </TableCell>
+        <div className="sticky left-0 flex z-10 bg-gray-50">
+          <div className="w-24" />
+          <TableCell width={96}>
+            <div className="text-center">{headers[0]}</div>
+          </TableCell>
+        </div>
         {headers.slice(1).map((header, index) => (
           <TableCell key={index}>
             <div className="flex justify-between items-center text-nowrap">
@@ -77,12 +79,14 @@ export default function Table() {
       {/* Data Rows */}
       {data.map((row, index) => (
         <div key={row.id} className="flex my-4 group">
-          <TableCell width={24}>
-            <RowButton num={index + 1} onClick={() => removeRow(row.id)} />
-          </TableCell>
-          <TableCell width={96}>
-            <ProductFilter />
-          </TableCell>
+          <div className="sticky left-0 flex z-10 bg-gray-50">
+            <TableCell width={24}>
+              <RowButton num={index + 1} onClick={() => removeRow(row.id)} />
+            </TableCell>
+            <TableCell width={96}>
+              <ProductFilter />
+            </TableCell>
+          </div>
           {row.variants.map((variant, index) => (
             <TableCell key={index}>
               <Product />
@@ -96,9 +100,12 @@ export default function Table() {
       ))}
 
       {/* Button to Add Row */}
-      <ContentCenter className={"w-24 p-4"}>
-        <AddButton onClick={addRow} />
-      </ContentCenter>
+      <div className="sticky left-0 flex z-10 bg-gray-50">
+        <ContentCenter className={"w-24 p-4"}>
+          <AddButton onClick={addRow} />
+        </ContentCenter>
+        <div className="w-96" />
+      </div>
     </div>
   );
 }
