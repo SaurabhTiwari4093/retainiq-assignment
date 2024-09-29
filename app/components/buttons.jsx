@@ -24,7 +24,7 @@ export function RowButton({ num, onClick }) {
       </button>
       <div className="flex items-center gap-2">
         <span className="text-3xl font-bold text-gray-700">{num}</span>
-        <button className="text-gray-700 hover:text-gray-900 mt-0.5 cursor-move">
+        <button className="text-gray-700 hover:text-gray-900 mt-0.5 cursor-grab">
           <MoveIcon />
         </button>
       </div>
