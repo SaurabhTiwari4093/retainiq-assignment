@@ -21,14 +21,14 @@ function ProductFilterTag({ text, color = "gray" }) {
   );
 }
 
-export function Product({ variant, setShowModal }) {
+export function Product({ variant, onProductClick }) {
   const { img, text } = variant;
 
   if (img === null) {
     return (
       <ProductWrapper>
         <ContentCenter className={"h-full"}>
-          <AddVariant onClick={() => setShowModal(true)} />
+          <AddVariant onClick={onProductClick} />
         </ContentCenter>
       </ProductWrapper>
     );

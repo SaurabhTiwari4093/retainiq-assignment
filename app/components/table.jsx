@@ -46,6 +46,7 @@ function DraggableRow({
   removeRow,
   addColumn,
   setShowModal,
+  onProductClick,
 }) {
   const [, dragRef] = useDrag({
     type: "row",
@@ -77,7 +78,11 @@ function DraggableRow({
       </div>
       {row.variants.map((variant, variantIndex) => (
         <TableCell key={variantIndex}>
-          <Product variant={variant} setShowModal={setShowModal} />
+          <Product
+            variant={variant}
+            setShowModal={setShowModal}
+            onProductClick={() => onProductClick(index, variantIndex)}
+          />
         </TableCell>
       ))}
       <ContentCenter className={"p-4"}>
@@ -92,6 +97,10 @@ export default function Table() {
   const [data, setData] = useState(initialData);
   const [idCounter, setIdCounter] = useState(initialData.length + 1);
   const [showModal, setShowModal] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState({
+    row: null,
+    column: null,
+  });
 
   // Function to add a new row with default null object structure for variants
   const addRow = () => {
@@ -140,6 +149,21 @@ export default function Table() {
     setData(updatedData);
   };
 
+  // Function to handle product cell click and open modal
+  const handleProductClick = (rowIndex, variantIndex) => {
+    setSelectedProduct({ row: rowIndex, column: variantIndex });
+    setShowModal(true);
+  };
+
+  // Function to update selected product
+  const updateProduct = (selectedVariant) => {
+    const updatedData = [...data];
+    updatedData[selectedProduct.row].variants[selectedProduct.column] =
+      selectedVariant;
+    setData(updatedData);
+    setShowModal(false); // Close modal after product selection
+  };
+
   return (
     <>
       <DndProvider backend={HTML5Backend}>
@@ -170,6 +194,7 @@ export default function Table() {
               removeRow={removeRow}
               addColumn={addColumn}
               setShowModal={setShowModal}
+              onProductClick={handleProductClick}
             />
           ))}
 
@@ -182,7 +207,10 @@ export default function Table() {
         </div>
       </DndProvider>
       {showModal && (
-        <CollectionModal setShowModal={setShowModal} />
+        <CollectionModal
+          setShowModal={setShowModal}
+          onSelectProduct={updateProduct}
+        />
       )}
     </>
   );

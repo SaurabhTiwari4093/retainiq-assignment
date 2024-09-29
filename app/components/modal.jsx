@@ -4,7 +4,7 @@ import ContentCenter from "./contentCenter";
 import Image from "next/image";
 import { CancelIcon } from "../assets/icons";
 
-export default function CollectionModal({ setShowModal }) {
+export default function CollectionModal({ setShowModal, onSelectProduct }) {
   const [collectionData, setCollectionData] = useState([]);
 
   useEffect(() => {
@@ -35,7 +35,11 @@ export default function CollectionModal({ setShowModal }) {
         </div>
         <div className="p-4 grid grid-cols-4 gap-3">
           {collectionData.map((product, index) => (
-            <div className="w-full flex flex-col gap-1" key={index}>
+            <div
+              className="w-full flex flex-col gap-1"
+              key={index}
+              onClick={() => onSelectProduct(product)}
+            >
               <div className="h-28 relative">
                 <Image
                   src={product.img}
