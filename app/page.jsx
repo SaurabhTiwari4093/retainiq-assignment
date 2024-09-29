@@ -4,12 +4,12 @@ import Table from "./components/table";
 
 export default function Home() {
   return (
-    <div className="flex">
+    <>
       <Sidebar />
-      <div className="flex-1 p-4">
+      <div className="p-4 pl-20 w-full">
         <Header />
         <Table />
       </div>
-    </div>
+    </>
   );
 }

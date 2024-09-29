@@ -1,15 +1,17 @@
 "use client";
 import React, { useState } from "react";
-import Item from "./Item";
-import ItemContainer from "./itemContainer";
-import { AddButton } from "./addRemoveButton";
+import Product from "./product";
+import ProductContainer from "./productContainer";
+import { AddButton, RowButton } from "./buttons";
+import ContentCenter from "./ContentCenter";
+import { MoreIcon } from "../assets/icons";
 
 const initialHeaders = ["Product Filter", "Primary Variant", "Variant 2"];
 const initialData = [
   {
     id: 1,
     filter: "Product Collection contains Anarkali Kurtas",
-    variants: [1, 2], // Just representing the number of variants, but these could be replaced with real data
+    variants: [1, 2],
   },
   {
     id: 2,
@@ -50,39 +52,46 @@ export default function Table() {
   return (
     <div className="bg-gray-100 rounded border border-gray-200 mt-4 p-4">
       {/* Header Row */}
-      <div className="flex my-4">
-        <ItemContainer width={24} />
-        <ItemContainer width={96}>{headers[0]}</ItemContainer>
+      <div className="flex my-4 font-medium">
+        <div className="w-24" />
+        <ProductContainer width={96}>
+          <div className="text-center">{headers[0]}</div>
+        </ProductContainer>
         {headers.slice(1).map((header, index) => (
-          <ItemContainer key={index}>{header}</ItemContainer>
+          <ProductContainer key={index}>
+            <div className="flex justify-between items-center text-nowrap">
+              {header}
+              <MoreIcon />
+            </div>
+          </ProductContainer>
         ))}
       </div>
 
       {/* Data Rows */}
       {data.map((row) => (
         <div key={row.id} className="flex my-4">
-          <ItemContainer width={24}>{row.id}</ItemContainer>
-          <ItemContainer width={96}>
-            <Item />
-          </ItemContainer>
+          <ProductContainer width={24}>
+            <RowButton id={row.id} />
+          </ProductContainer>
+          <ProductContainer width={96}>
+            <Product />
+          </ProductContainer>
           {row.variants.map((variant, index) => (
-            <ItemContainer key={index}>
-              <Item />
-            </ItemContainer>
+            <ProductContainer key={index}>
+              <Product />
+            </ProductContainer>
           ))}
           {/* Button to Add Column */}
-          <ItemContainer border={false}>
+          <ContentCenter className={"p-4"}>
             <AddButton onClick={addColumn} />
-          </ItemContainer>
+          </ContentCenter>
         </div>
       ))}
 
       {/* Button to Add Row */}
-      <div className="flex my-4">
-        <ItemContainer width={24} border={false}>
-          <AddButton onClick={addRow} />
-        </ItemContainer>
-      </div>
+      <ContentCenter className={"w-24 p-4"}>
+        <AddButton onClick={addRow} />
+      </ContentCenter>
     </div>
   );
 }
