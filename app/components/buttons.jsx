@@ -1,6 +1,6 @@
 import React from "react";
 import { AddIcon, MoveIcon, RemoveIcon } from "../assets/icons";
-import ContentCenter from "./ContentCenter";
+import ContentCenter from "./contentCenter";
 
 export function AddButton({ onClick }) {
   return (

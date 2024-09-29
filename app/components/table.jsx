@@ -1,9 +1,9 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Product, ProductFilter } from "./product";
 import TableCell from "./tableCell";
 import { AddButton, RowButton } from "./buttons";
-import ContentCenter from "./ContentCenter";
+import ContentCenter from "./contentCenter";
 import { MoreIcon } from "../assets/icons";
 import { useDrag, useDrop, DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -93,6 +93,7 @@ function DraggableRow({
 }
 
 export default function Table() {
+  const [collectionData, setCollectionData] = useState([]);
   const [headers, setHeaders] = useState(initialHeaders);
   const [data, setData] = useState(initialData);
   const [idCounter, setIdCounter] = useState(initialData.length + 1);
@@ -101,6 +102,21 @@ export default function Table() {
     row: null,
     column: null,
   });
+
+  // Fetch design data for modal
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("/data.json");
+        const data = await response.json();
+        setCollectionData(data);
+      } catch (e) {
+        console.log("Error in fetching data", e);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   // Function to add a new row with default null object structure for variants
   const addRow = () => {
@@ -208,6 +224,7 @@ export default function Table() {
       </DndProvider>
       {showModal && (
         <CollectionModal
+          collectionData={collectionData}
           setShowModal={setShowModal}
           onSelectProduct={updateProduct}
         />
