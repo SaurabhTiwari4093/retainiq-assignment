@@ -12,7 +12,7 @@ function ProductWrapper({ children }) {
 function ProductFilterTag({ text, color = "gray" }) {
   return (
     <div
-      className={`bg-${color}-50 border border-${color}-200 shadow-sm rounded py-1 px-2 text-nowrap`}
+      className={`bg-${color}-50 border border-${color}-200 text-${color}-600 shadow-sm rounded py-1 px-2 text-nowrap`}
     >
       {text}
     </div>

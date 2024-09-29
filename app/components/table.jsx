@@ -23,18 +23,19 @@ const initialData = [
 export default function Table() {
   const [headers, setHeaders] = useState(initialHeaders);
   const [data, setData] = useState(initialData);
+  const [idCounter, setIdCounter] = useState(initialData.length + 1); // Initialize with the next available ID
 
   // Function to add a new row
   const addRow = () => {
-    const newId = data.length + 1;
     setData([
       ...data,
       {
-        id: newId,
+        id: idCounter, // Use idCounter for unique IDs
         filter: `Product Collection contains Anarkali Kurtas`,
         variants: Array(headers.length - 1).fill(1),
       },
     ]);
+    setIdCounter(idCounter + 1); // Increment idCounter after each addition
   };
 
   // Function to add a new column
@@ -46,6 +47,12 @@ export default function Table() {
       variants: [...row.variants, 1],
     }));
 
+    setData(updatedData);
+  };
+
+  // Function to remove a row by ID
+  const removeRow = (id) => {
+    const updatedData = data.filter((row) => row.id !== id);
     setData(updatedData);
   };
 
@@ -68,10 +75,10 @@ export default function Table() {
       </div>
 
       {/* Data Rows */}
-      {data.map((row) => (
-        <div key={row.id} className="flex my-4">
+      {data.map((row, index) => (
+        <div key={row.id} className="flex my-4 group">
           <TableCell width={24}>
-            <RowButton id={row.id} />
+            <RowButton num={index + 1} onClick={() => removeRow(row.id)} />
           </TableCell>
           <TableCell width={96}>
             <ProductFilter />
