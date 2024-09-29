@@ -50,7 +50,7 @@ export default function Table() {
   };
 
   return (
-    <div className="bg-gray-100 rounded border border-gray-200 mt-4 p-4">
+    <div className="bg-gray-50 rounded border border-gray-200 mt-4 p-4">
       {/* Header Row */}
       <div className="flex my-4 font-medium text-gray-600">
         <div className="w-24" />
