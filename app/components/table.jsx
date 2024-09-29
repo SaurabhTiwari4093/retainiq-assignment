@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
-import Product from "./product";
-import ProductContainer from "./productContainer";
+import { Product, ProductFilter } from "./product";
+import TableCell from "./tableCell";
 import { AddButton, RowButton } from "./buttons";
 import ContentCenter from "./ContentCenter";
 import { MoreIcon } from "../assets/icons";
@@ -52,34 +52,34 @@ export default function Table() {
   return (
     <div className="bg-gray-100 rounded border border-gray-200 mt-4 p-4">
       {/* Header Row */}
-      <div className="flex my-4 font-medium">
+      <div className="flex my-4 font-medium text-gray-600">
         <div className="w-24" />
-        <ProductContainer width={96}>
+        <TableCell width={96}>
           <div className="text-center">{headers[0]}</div>
-        </ProductContainer>
+        </TableCell>
         {headers.slice(1).map((header, index) => (
-          <ProductContainer key={index}>
+          <TableCell key={index}>
             <div className="flex justify-between items-center text-nowrap">
               {header}
               <MoreIcon />
             </div>
-          </ProductContainer>
+          </TableCell>
         ))}
       </div>
 
       {/* Data Rows */}
       {data.map((row) => (
         <div key={row.id} className="flex my-4">
-          <ProductContainer width={24}>
+          <TableCell width={24}>
             <RowButton id={row.id} />
-          </ProductContainer>
-          <ProductContainer width={96}>
-            <Product />
-          </ProductContainer>
+          </TableCell>
+          <TableCell width={96}>
+            <ProductFilter />
+          </TableCell>
           {row.variants.map((variant, index) => (
-            <ProductContainer key={index}>
+            <TableCell key={index}>
               <Product />
-            </ProductContainer>
+            </TableCell>
           ))}
           {/* Button to Add Column */}
           <ContentCenter className={"p-4"}>
