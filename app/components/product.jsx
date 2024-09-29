@@ -1,5 +1,7 @@
 import Image from "next/image";
 import React from "react";
+import ContentCenter from "./contentCenter";
+import { AddVariant } from "./buttons";
 
 function ProductWrapper({ children }) {
   return (
@@ -19,19 +21,31 @@ function ProductFilterTag({ text, color = "gray" }) {
   );
 }
 
-export function Product() {
+export function Product({ variant }) {
+  const { img, text } = variant;
+
+  if (img === null) {
+    return (
+      <ProductWrapper>
+        <ContentCenter className={"h-full"}>
+          <AddVariant onClick={() => console.log("add Variant")} />
+        </ContentCenter>
+      </ProductWrapper>
+    );
+  }
+
   return (
     <ProductWrapper>
       <div className="h-full flex flex-col gap-2">
         <div className="h-36 relative">
           <Image
-            src={"/images/1.jpg"}
+            src={img}
             alt={"Product"}
             fill={true}
             className="rounded object-cover object-top"
           />
         </div>
-        <div className="text-sm font-medium text-center">Anniversary Sale</div>
+        <div className="text-sm font-medium text-center">{text}</div>
       </div>
     </ProductWrapper>
   );

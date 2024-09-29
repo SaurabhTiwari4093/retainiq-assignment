@@ -13,6 +13,17 @@ export function AddButton({ onClick }) {
   );
 }
 
+export function AddVariant({ onClick }) {
+  return (
+    <button
+      className="border border-gray-200 shadow rounded py-1 px-2 flex text-sm items-center"
+      onClick={onClick}
+    >
+      <AddIcon /> <span>Add design</span>
+    </button>
+  );
+}
+
 export function RowButton({ num, onClick }) {
   return (
     <ContentCenter className={"h-full relative"}>

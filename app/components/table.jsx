@@ -12,17 +12,34 @@ const initialHeaders = ["Product Filter", "Primary Variant", "Variant 2"];
 const initialData = [
   {
     id: 1,
-    filter: "Product Collection contains Anarkali Kurtas",
-    variants: [1, 2],
+    variants: [
+      {
+        img: "/images/1.jpg",
+        text: "Anniversary Sale",
+      },
+      {
+        img: "/images/2.webp",
+        text: "Zero discount",
+      },
+    ],
   },
   {
     id: 2,
-    filter: "Product Collection contains Anarkali Kurtas",
-    variants: [1, 2],
+    variants: [
+      {
+        img: "/images/3.webp",
+        text: "Anniversary Sale",
+      },
+      {
+        img: "/images/4.webp",
+        text: "Zero discount",
+      },
+    ],
   },
 ];
 
 function DraggableRow({ row, index, moveRow, removeRow, addColumn }) {
+  console.log("Row ", row);
   const [, dragRef] = useDrag({
     type: "row",
     item: { index },
@@ -51,12 +68,11 @@ function DraggableRow({ row, index, moveRow, removeRow, addColumn }) {
           <ProductFilter />
         </TableCell>
       </div>
-      {row.variants.map((variant, index) => (
-        <TableCell key={index}>
-          <Product />
+      {row.variants.map((variant, variantIndex) => (
+        <TableCell key={variantIndex}>
+          <Product variant={variant} />
         </TableCell>
       ))}
-      {/* Button to Add Column */}
       <ContentCenter className={"p-4"}>
         <AddButton onClick={addColumn} />
       </ContentCenter>
@@ -67,40 +83,48 @@ function DraggableRow({ row, index, moveRow, removeRow, addColumn }) {
 export default function Table() {
   const [headers, setHeaders] = useState(initialHeaders);
   const [data, setData] = useState(initialData);
-  const [idCounter, setIdCounter] = useState(initialData.length + 1); // Initialize with the next available ID
+  const [idCounter, setIdCounter] = useState(initialData.length + 1);
 
-  // Function to add a new row
+  // Function to add a new row with default null object structure for variants
   const addRow = () => {
+    const newVariants = Array(headers.length - 1).fill({
+      img: null,
+      text: null,
+    });
+
     setData([
       ...data,
       {
-        id: idCounter, // Use idCounter for unique IDs
-        filter: `Product Collection contains Anarkali Kurtas`,
-        variants: Array(headers.length - 1).fill(1),
+        id: idCounter,
+        variants: newVariants,
       },
     ]);
-    setIdCounter(idCounter + 1); // Increment idCounter after each addition
+
+    setIdCounter(idCounter + 1);
   };
 
-  // Function to add a new column
+  // Function to add a new column (variant) with default null object structure for each row
   const addColumn = () => {
     setHeaders([...headers, `Variant ${headers.length}`]);
 
     const updatedData = data.map((row) => ({
       ...row,
-      variants: [...row.variants, 1],
+      variants: [
+        ...row.variants,
+        {
+          img: null,
+          text: null,
+        },
+      ],
     }));
 
     setData(updatedData);
   };
 
-  // Function to remove a row by ID
   const removeRow = (id) => {
-    const updatedData = data.filter((row) => row.id !== id);
-    setData(updatedData);
+    setData(data.filter((row) => row.id !== id));
   };
 
-  // Function to move rows when dragged
   const moveRow = (fromIndex, toIndex) => {
     const updatedData = [...data];
     const [movedRow] = updatedData.splice(fromIndex, 1);
@@ -111,7 +135,6 @@ export default function Table() {
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="bg-gray-50 rounded border border-gray-200 mt-4 relative overflow-x-auto">
-        {/* Header Row */}
         <div className="flex my-4 font-medium text-gray-600 z-10">
           <div className="sticky left-0 flex z-20 bg-gray-50">
             <div className="w-24" />
@@ -129,7 +152,6 @@ export default function Table() {
           ))}
         </div>
 
-        {/* Data Rows */}
         {data.map((row, index) => (
           <DraggableRow
             key={row.id}
@@ -141,7 +163,6 @@ export default function Table() {
           />
         ))}
 
-        {/* Button to Add Row */}
         <div className="sticky left-0 flex z-10 bg-gray-50">
           <ContentCenter className={"w-24 p-4"}>
             <AddButton onClick={addRow} />
